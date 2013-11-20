@@ -1,7 +1,10 @@
 ﻿@model NumberGuessingGame.ViewModels.SecretNumberViewModel
 
-@if (Model != null)
-{
+@*
+    Displays all guesses made and thier outcome
+*@
+
+@{
     <ol>
         @foreach (var item in Model.SecretNumber.GuessedNumbers)
 	    {
@@ -10,6 +13,5 @@
 		    </li>
 	    }
     </ol>
-    
 }
 

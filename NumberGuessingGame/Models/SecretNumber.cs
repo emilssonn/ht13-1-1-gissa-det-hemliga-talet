@@ -13,6 +13,7 @@ namespace NumberGuessingGame.Models
 
         private GuessedNumber _lastGuessedNumber;
 
+        //Random generated number
         private int? _number;
 
         public const int MaxNumberOfGuesses = 7;
@@ -21,7 +22,7 @@ namespace NumberGuessingGame.Models
 
         #region Properties
 
-        public bool CanMakeGuess 
+        public bool CanMakeGuess
         {
             get
             {
@@ -29,7 +30,8 @@ namespace NumberGuessingGame.Models
             }
         }
 
-        public int Count 
+        //Number of guesses made
+        public int Count
         {
             get
             {
@@ -37,7 +39,7 @@ namespace NumberGuessingGame.Models
             }
         }
 
-        public IList<GuessedNumber> GuessedNumbers 
+        public IList<GuessedNumber> GuessedNumbers
         {
             get
             {
@@ -45,7 +47,7 @@ namespace NumberGuessingGame.Models
             }
         }
 
-        public GuessedNumber LastGuessedNumber 
+        public GuessedNumber LastGuessedNumber
         {
             get
             {
@@ -69,14 +71,20 @@ namespace NumberGuessingGame.Models
 
         #region Methods
 
+        //Init game
         public void Initialize()
         {
             this._guessedNumbers.Clear();
-            this._lastGuessedNumber.Number = null;
-            this._lastGuessedNumber.Outcome = Outcome.Indefinite;
+            this._lastGuessedNumber = new GuessedNumber
+            {
+                Number = null,
+                Outcome = Outcome.Indefinite
+            };
             this.Number = new Random().Next(1, 101);
         }
 
+        //Make a guess is possible, returns the outcome of the guess
+        //Throws ArgumentOutOfRangeException if guess is not valid
         public Outcome MakeGuess(int guess)
         {
             if (guess < 1 || guess > 100)

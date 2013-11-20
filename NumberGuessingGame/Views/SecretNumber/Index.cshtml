@@ -4,35 +4,26 @@
     ViewBag.Title = "Gissa det hemliga talet";
 }
 
-@Html.DisplayFor(m => m.Header)
+@*
+    Display the main page with the help of partial view
+*@
 
-@using (Html.BeginForm())
+<h3>@Html.DisplayFor(m => m.Header)</h3>
+
+@if (Model.DisplayForm)
 {
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(false, "Fel inträffade. Korrigera det som är fel och försök igen.")
-
-    @Html.LabelFor(m => m.Number, "Gissa ett tal mellan 1 och 100")
-    
-    @Html.TextBoxFor(m => m.Number, new { @maxlength = "3", @size = "2", @autocomplete = "off", @autofocus = "autofocus", @onFocus = "this.select()"})
-    
-    <p>
-        <input type="submit" value="Gissa" />
-    </p>
+    @Html.Partial("_GuessForm")
 }
-
 
 @foreach (var item in Model.Message())
 {
     <p>@item</p>
 }
-<ol>
-    @foreach (var item in Model.SecretNumber.GuessedNumbers)
-    {
-		<li>
-            @Html.DisplayFor(m => item.Number) - @Html.DisplayFor(m => item.Outcome)
-	    </li>
-	}
-</ol>
+
+@if (Model.SecretNumber.Count > 0)
+{
+    @Html.Partial("_PreviousGuesses")
+}
 
 @if (Model.SecretNumber.Number != null)
 {

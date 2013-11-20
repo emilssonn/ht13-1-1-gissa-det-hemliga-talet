@@ -12,22 +12,26 @@ namespace NumberGuessingGame.Controllers
     {
         private static string SessionLocation = "SecretNumber";
 
+        //Get SecretNumber from session or create a new.
+        //Throws Exception if session expired and Request method is post
         private SecretNumber SecretNumber
         {
             get
             {
+                if (Request.HttpMethod.ToLower() == "post")
+                {
+                    if (Session[SessionLocation] == null || Session.IsNewSession)
+                        throw new Exception();       
+                }
                 if (Session[SessionLocation] == null)
                 {
-                    Session.Timeout = 1; 
                     Session[SessionLocation] = new SecretNumber();
                 }
                 return (SecretNumber)Session[SessionLocation];
             }
         }
 
-        //
         // GET: /SecretNumber/
-
         public ActionResult Index()
         {
             var sNViewModel = new SecretNumberViewModel();
@@ -35,26 +39,33 @@ namespace NumberGuessingGame.Controllers
             return View("Index", sNViewModel);
         }
 
+        // GET: /SecretNumber/New
+        //Init a new game, redirect to Index
         public ActionResult New()
         {
             this.SecretNumber.Initialize();
             return RedirectToAction("Index");
         }
 
+        // POST: /SecretNumber
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index([Bind(Include = "Number")]SecretNumberViewModel sNViewModel)
         {
-            if (Session[SessionLocation] == null)
+            try
+            {
+                sNViewModel.SecretNumber = this.SecretNumber;
+                if (ModelState.IsValid)
+                {
+                    this.SecretNumber.MakeGuess(sNViewModel.Number);
+                }
+                return View("Index", sNViewModel);
+            }
+            //Session Expired
+            catch (Exception)
             {
                 return View("GameEnded");
             }
-            sNViewModel.SecretNumber = this.SecretNumber;
-            if (ModelState.IsValid)
-            {           
-                this.SecretNumber.MakeGuess(sNViewModel.Number);
-            }
-            return View("Index", sNViewModel);
         }
     }
 }

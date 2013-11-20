@@ -9,89 +9,122 @@ namespace NumberGuessingGame.ViewModels
 {
     public class SecretNumberViewModel
     {
-        [Required(ErrorMessage = "En gissing måste anges.")]
-        [Range(1,100, ErrorMessage = "Måste vara ett heltal mellan 1 och 100")]
+        //Current guess
+        [Required(
+            ErrorMessageResourceType = typeof(Resources.Strings),
+            ErrorMessageResourceName = "RequiredError")]
+        [Range(1, 100, 
+            ErrorMessageResourceType = typeof(Resources.Strings),
+            ErrorMessageResourceName = "RangeError")]
         public int Number { get; set; }
 
         [ScaffoldColumn(false)]
         public SecretNumber SecretNumber { get; set; }
 
+        //Returns the header text to display
         [ScaffoldColumn(false)]
         public string Header
         {
             get
             {
                 if (SecretNumber.LastGuessedNumber.Outcome == Outcome.Right)
-                    return "Rätt gissat!";
+                    return Resources.Strings.CorrectGuess;
                 else if (SecretNumber.Number != null)
-                    return "Inga fler gissningar!";
+                    return Resources.Strings.NoMoreGuesses;
                 else
-                    return String.Format("{0} gissningen", this.GuessNr());
+                    return String.Format(Resources.Strings.GuessNr, this.GuessNr());
             }
         }
-       
+
+        //Returns if the form should be DISPLAYED or not
+        [ScaffoldColumn(false)]
+        public bool DisplayForm
+        {
+            get
+            {
+                if (this.SecretNumber != null)
+                    return this.SecretNumber.LastGuessedNumber.Outcome != Outcome.Right;
+                return true;
+            }
+        }
+
+        //Returns if the form should be DISABLED or ont
+        [ScaffoldColumn(false)]
+        public bool DisableForm
+        {
+            get
+            {
+                if (this.SecretNumber != null)
+                    return this.SecretNumber.Number != null;
+                return false;
+            }
+        }
+
+        //Returns the messages that should be displayed
         public IEnumerable<string> Message()
-        {  
+        {
             var guess = SecretNumber.LastGuessedNumber.Number;
             var lastOutcome = SecretNumber.LastGuessedNumber.Outcome;
             var messages = new List<string>();
 
             if (lastOutcome == Outcome.Right)
             {
-                messages.Add(String.Format("Gratis du klarade det på {0} försöket.", this.GuessNr(0).ToLower()));
+                messages.Add(String.Format(Resources.Strings.CorrectGuessMessage, this.GuessNr(0).ToLower()));
             }
             else
             {
                 switch (lastOutcome)
                 {
                     case Outcome.Low:
-                        messages.Add(String.Format("{0} är för lågt.", guess));
+                        messages.Add(String.Format(Resources.Strings.LowGuess, guess));
                         break;
 
                     case Outcome.High:
-                        messages.Add(String.Format("{0} är för högt.", guess));
+                        messages.Add(String.Format(Resources.Strings.HighGuess, guess));
                         break;
 
                     case Outcome.OldGuess:
-                        messages.Add(String.Format("Du har redan gissat på talet {0}!", guess));
+                        messages.Add(String.Format(Resources.Strings.OldGuess, guess));
                         break;
                 }
                 if (!SecretNumber.CanMakeGuess)
                 {
-                    messages.Add("Inga mer gissningar");
-                    messages.Add(String.Format("Det hemliga talet var {0}!", SecretNumber.Number));
+                    messages.Add(Resources.Strings.NoMoreGuesses);
+                    messages.Add(String.Format(Resources.Strings.SecretNumber, SecretNumber.Number));
                 }
             }
             return messages;
         }
 
+        //Returns number of guesses made or what guess that will be made
+        //Cardinal to ordinals
         private string GuessNr(int start = 1)
-        {   
+        {
             switch (SecretNumber.Count + start)
             {
                 case 1:
-                    return "Första";
+                    return Resources.Strings.First;
                 case 2:
-                    return "Andra";
+                    return Resources.Strings.Second;
 
                 case 3:
-                    return "Tredje";
+                    return Resources.Strings.Third;
 
                 case 4:
-                    return "Fjärde";
+                    return Resources.Strings.Fourth;
 
                 case 5:
-                    return "Femte";
+                    return Resources.Strings.Fifth;
 
                 case 6:
-                    return "Sjätte";
+                    return Resources.Strings.Sixth;
 
                 case 7:
-                    return "Sjunde";
-                    
+                    return Resources.Strings.Seventh;
+
                 default:
                     return "";
-            }           
+            }
         }
     }
 }
