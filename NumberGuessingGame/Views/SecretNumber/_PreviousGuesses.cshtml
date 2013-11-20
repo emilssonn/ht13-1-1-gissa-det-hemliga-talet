@@ -1,0 +1,15 @@
+﻿@model NumberGuessingGame.ViewModels.SecretNumberViewModel
+
+@if (Model != null)
+{
+    <ol>
+        @foreach (var item in Model.SecretNumber.GuessedNumbers)
+	    {
+		    <li>
+                @Html.DisplayFor(m => item.Number) - @Html.DisplayFor(m => item.Outcome)
+		    </li>
+	    }
+    </ol>
+    
+}
+

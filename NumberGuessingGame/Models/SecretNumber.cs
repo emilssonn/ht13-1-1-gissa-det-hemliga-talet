@@ -7,6 +7,8 @@ namespace NumberGuessingGame.Models
 {
     public class SecretNumber
     {
+        #region Fields
+
         private List<GuessedNumber> _guessedNumbers;
 
         private GuessedNumber _lastGuessedNumber;
@@ -14,6 +16,10 @@ namespace NumberGuessingGame.Models
         private int? _number;
 
         public const int MaxNumberOfGuesses = 7;
+
+        #endregion
+
+        #region Properties
 
         public bool CanMakeGuess 
         {
@@ -58,6 +64,10 @@ namespace NumberGuessingGame.Models
                 this._number = value;
             }
         }
+
+        #endregion
+
+        #region Methods
 
         public void Initialize()
         {
@@ -109,5 +119,7 @@ namespace NumberGuessingGame.Models
             this._guessedNumbers = new List<GuessedNumber>(MaxNumberOfGuesses);
             this.Initialize();
         }
+
+        #endregion
     }
 }

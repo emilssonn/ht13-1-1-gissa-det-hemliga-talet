@@ -1,0 +1,32 @@
+﻿@model NumberGuessingGame.ViewModels.SecretNumberViewModel
+
+@{
+    ViewBag.Title = "Gissa det hemliga talet";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(false, "Fel inträffade. Korrigera det som är fel och försök igen.")
+
+    @Html.LabelFor(m => m.Number, "Gissa ett tal mellan 1 och 100")
+    
+    @Html.TextBoxFor(m => m.Number, new { @maxlength = "3", @size = "2", @autocomplete = "off", @autofocus = "autofocus", @onFocus = "this.select()"})
+
+    <p>
+        <input type="submit" value="Gissa" />
+    </p>
+}
+
+
+@Html.DisplayFor(m => m.Message)
+<ol>
+    @foreach (var item in Model.SecretNumber.GuessedNumbers)
+    {
+		<li>
+            @Html.DisplayFor(m => item.Number) - @Html.DisplayFor(m => item.Outcome)
+	    </li>
+	}
+</ol>
+
