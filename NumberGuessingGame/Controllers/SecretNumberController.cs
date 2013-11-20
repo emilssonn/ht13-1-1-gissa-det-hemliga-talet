@@ -17,7 +17,10 @@ namespace NumberGuessingGame.Controllers
             get
             {
                 if (Session[SessionLocation] == null)
-                    Session[SessionLocation] = new SecretNumber();       
+                {
+                    Session.Timeout = 1; 
+                    Session[SessionLocation] = new SecretNumber();
+                }
                 return (SecretNumber)Session[SessionLocation];
             }
         }
@@ -32,37 +35,26 @@ namespace NumberGuessingGame.Controllers
             return View("Index", sNViewModel);
         }
 
+        public ActionResult New()
+        {
+            this.SecretNumber.Initialize();
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index([Bind(Include = "Number")]SecretNumberViewModel sNViewModel)
         {
-            Session.Timeout = 1; 
+            if (Session[SessionLocation] == null)
+            {
+                return View("GameEnded");
+            }
             sNViewModel.SecretNumber = this.SecretNumber;
             if (ModelState.IsValid)
             {           
-                if (this.SecretNumber.CanMakeGuess)
-                {
-                    Outcome guess = this.SecretNumber.MakeGuess(sNViewModel.Number);
-                    switch (guess)
-                    {
-                        case Outcome.Low:
-
-                            break;
-                        case Outcome.High:
-                            break;
-                        case Outcome.Right:
-                            break;
-                        case Outcome.NoMoreGuesses:
-                            break;
-                        case Outcome.OldGuess:
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                this.SecretNumber.MakeGuess(sNViewModel.Number);
             }
             return View("Index", sNViewModel);
         }
-
     }
 }

@@ -4,6 +4,7 @@
     ViewBag.Title = "Gissa det hemliga talet";
 }
 
+@Html.DisplayFor(m => m.Header)
 
 @using (Html.BeginForm())
 {
@@ -13,14 +14,17 @@
     @Html.LabelFor(m => m.Number, "Gissa ett tal mellan 1 och 100")
     
     @Html.TextBoxFor(m => m.Number, new { @maxlength = "3", @size = "2", @autocomplete = "off", @autofocus = "autofocus", @onFocus = "this.select()"})
-
+    
     <p>
         <input type="submit" value="Gissa" />
     </p>
 }
 
 
-@Html.DisplayFor(m => m.Message)
+@foreach (var item in Model.Message())
+{
+    <p>@item</p>
+}
 <ol>
     @foreach (var item in Model.SecretNumber.GuessedNumbers)
     {
@@ -29,4 +33,9 @@
 	    </li>
 	}
 </ol>
+
+@if (Model.SecretNumber.Number != null)
+{
+    @Html.ActionLink("Slumpa ett nytt tal", "New")
+}
 

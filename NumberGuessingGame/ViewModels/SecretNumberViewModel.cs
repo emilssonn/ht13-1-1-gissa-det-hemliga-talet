@@ -17,32 +17,52 @@ namespace NumberGuessingGame.ViewModels
         public SecretNumber SecretNumber { get; set; }
 
         [ScaffoldColumn(false)]
-        public string Message
+        public string Header
         {
             get
             {
-                var guess = SecretNumber.LastGuessedNumber.Number;
-                switch (SecretNumber.LastGuessedNumber.Outcome)
-                {          
+                if (SecretNumber.LastGuessedNumber.Outcome == Outcome.Right)
+                    return "Rätt gissat!";
+                else if (SecretNumber.Number != null)
+                    return "Inga fler gissningar!";
+                else
+                    return String.Format("{0} gissningen", this.GuessNr());
+            }
+        }
+       
+        public IEnumerable<string> Message()
+        {  
+            var guess = SecretNumber.LastGuessedNumber.Number;
+            var lastOutcome = SecretNumber.LastGuessedNumber.Outcome;
+            var messages = new List<string>();
+
+            if (lastOutcome == Outcome.Right)
+            {
+                messages.Add(String.Format("Gratis du klarade det på {0} försöket.", this.GuessNr(0).ToLower()));
+            }
+            else
+            {
+                switch (lastOutcome)
+                {
                     case Outcome.Low:
-                        return String.Format("{0} är för lågt.", guess);
+                        messages.Add(String.Format("{0} är för lågt.", guess));
+                        break;
 
                     case Outcome.High:
-                        return String.Format("{0} är för högt.", guess);
-
-                    case Outcome.Right:
-                        return String.Format("Gratis du klarade det på {0} försöket.", this.GuessNr(0).ToLower());
-
-                    case Outcome.NoMoreGuesses:
-                        return "Inga mer gissningar";
+                        messages.Add(String.Format("{0} är för högt.", guess));
+                        break;
 
                     case Outcome.OldGuess:
-                        return String.Format("Du har redan gissat på talet {0}!", guess);
-
-                    default:
-                        return "";
+                        messages.Add(String.Format("Du har redan gissat på talet {0}!", guess));
+                        break;
+                }
+                if (!SecretNumber.CanMakeGuess)
+                {
+                    messages.Add("Inga mer gissningar");
+                    messages.Add(String.Format("Det hemliga talet var {0}!", SecretNumber.Number));
                 }
             }
+            return messages;
         }
 
         private string GuessNr(int start = 1)
@@ -70,12 +90,8 @@ namespace NumberGuessingGame.ViewModels
                     return "Sjunde";
                     
                 default:
-                    return "Inga fler gissningar!";
-            }
-            
+                    return "";
+            }           
         }
-
-       
-
     }
 }
