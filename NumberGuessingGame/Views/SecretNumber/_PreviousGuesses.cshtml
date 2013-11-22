@@ -1,17 +1,38 @@
 ﻿@model NumberGuessingGame.ViewModels.SecretNumberViewModel
 
 @*
-    Displays all guesses made and thier outcome
+    Displays all guesses made and outcome
 *@
 
 @{
-    <ol>
-        @foreach (var item in Model.SecretNumber.GuessedNumbers)
+    var index = 1;
+    <ul class="guess list-inline">
+        @foreach (var item in Model.SecretNumber.GuessedNumbers )
 	    {
 		    <li>
-                @Html.DisplayFor(m => item.Number) - @Html.DisplayFor(m => item.Outcome)
+                <p class="text-center">
+                    @index
+                </p>
+                
+                <p class="text-center">
+                    @if (item.Outcome == NumberGuessingGame.Models.Outcome.High)
+                    {
+                        <span class="glyphicon glyphicon-hand-up high"></span>
+                        @Html.DisplayFor(m => item.Number)
+                    }
+                    else if (item.Outcome == NumberGuessingGame.Models.Outcome.Low)
+                    {
+                        @Html.DisplayFor(m => item.Number)
+                        <span class="glyphicon glyphicon-hand-down low"></span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(m => item.Number)
+                        <span class="glyphicon glyphicon-thumbs-up correct"></span>
+                    }
+                </p>       
 		    </li>
+            index++;
 	    }
-    </ol>
+    </ul>
 }
-

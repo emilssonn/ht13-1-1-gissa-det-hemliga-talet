@@ -83,7 +83,7 @@ namespace NumberGuessingGame.Models
             this.Number = new Random().Next(1, 101);
         }
 
-        //Make a guess is possible, returns the outcome of the guess
+        //Make a guess if possible, returns the outcome of the guess
         //Throws ArgumentOutOfRangeException if guess is not valid
         public Outcome MakeGuess(int guess)
         {

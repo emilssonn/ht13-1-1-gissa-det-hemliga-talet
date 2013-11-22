@@ -8,10 +8,22 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <h2>@ViewBag.Title</h2>
-    @RenderBody()
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1>@ViewBag.Title</h1>
+            </div>
+            <div class="panel-body">
+                @RenderBody()
+            </div>
+            <div class="panel-footer">
+                ASP.NET MVC 1DV409 - Laboration 1.1
+            </div>
+        </div>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
     @RenderSection("scripts", required: false)
 </body>
 </html>

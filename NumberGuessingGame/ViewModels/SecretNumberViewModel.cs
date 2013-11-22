@@ -13,10 +13,13 @@ namespace NumberGuessingGame.ViewModels
         [Required(
             ErrorMessageResourceType = typeof(Resources.Strings),
             ErrorMessageResourceName = "RequiredError")]
+        [RegularExpression("([0-9]+)",
+             ErrorMessageResourceType = typeof(Resources.Strings),
+            ErrorMessageResourceName = "RangeError")]
         [Range(1, 100, 
             ErrorMessageResourceType = typeof(Resources.Strings),
             ErrorMessageResourceName = "RangeError")]
-        public int Number { get; set; }
+        public int? Guess { get; set; }
 
         [ScaffoldColumn(false)]
         public SecretNumber SecretNumber { get; set; }
@@ -97,7 +100,7 @@ namespace NumberGuessingGame.ViewModels
         }
 
         //Returns number of guesses made or what guess that will be made
-        //Cardinal to ordinals
+        //Cardinal to ordinal
         private string GuessNr(int start = 1)
         {
             switch (SecretNumber.Count + start)

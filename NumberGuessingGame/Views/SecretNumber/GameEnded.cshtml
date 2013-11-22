@@ -1,9 +1,15 @@
 ﻿@model NumberGuessingGame.ViewModels.SecretNumberViewModel
 
 @{
-    ViewBag.Title = "GameEnded";
+    ViewBag.Title = "Gissa det hemliga talet";
 }
 
-<h2>GameEnded</h2>
+<h3>Spelomgången kunde inte fullföljas</h3>
 
-@Html.ActionLink("Börja om", "New")
+<p>
+    Du väntade för länge med att gissa varför spelomgången inte kunde fullföljas.
+</p>
+
+<p>
+    @Html.ActionLink("Börja om", "New", null, new { @class = "btn btn-primary" })
+</p>

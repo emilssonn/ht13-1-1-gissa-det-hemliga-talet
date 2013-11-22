@@ -6,17 +6,18 @@
 *@
 
 @{
-    var notDisabled = new {maxlength = "3", size = "2", autocomplete = "off", autofocus = "autofocus", onFocus = "this.select()"};
-    var disabled = new { maxlength = "3", size = "2", autocomplete = "off", autofocus = "autofocus", onFocus = "this.select()", disabled = "disabled" };
+    var notDisabled = new { maxlength = "3", size = "2", autocomplete = "off", autofocus = "autofocus", onFocus = "this.select()" };
+    var disabled = new { notDisabled, disabled = "disabled" };
+
     using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(false, "Fel inträffade. Korrigera det som är fel och försök igen.")
+      
+        @Html.LabelFor(m => m.Guess, "Gissa ett tal mellan 1 och 100:")
 
-        @Html.LabelFor(m => m.Number, "Gissa ett tal mellan 1 och 100")
-
-        @Html.TextBoxFor(m => m.Number, (Model.DisableForm ? (object)disabled : notDisabled))
-    
-        <input type="submit" value="Gissa" @(Model.DisableForm ? "disabled" : "") />
+        @Html.TextBoxFor(m => m.Guess, (Model.DisableForm ? (object)disabled : notDisabled))
+        
+        <button type="submit" class="btn btn-primary" @(Model.DisableForm ? "disabled" : "")>Gissa</button>    
     }
 }

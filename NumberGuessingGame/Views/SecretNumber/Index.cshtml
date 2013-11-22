@@ -15,10 +15,13 @@
     @Html.Partial("_GuessForm")
 }
 
-@foreach (var item in Model.Message())
-{
-    <p>@item</p>
-}
+<p>
+    @foreach (var item in Model.Message())
+    {
+        @item
+        @:&nbsp;
+    }
+</p>
 
 @if (Model.SecretNumber.Count > 0)
 {
@@ -27,6 +30,6 @@
 
 @if (Model.SecretNumber.Number != null)
 {
-    @Html.ActionLink("Slumpa ett nytt tal", "New")
+    @Html.ActionLink("Slumpa ett nytt tal", "New", null, new { @class = "btn btn-primary" })
 }
 
